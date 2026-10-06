@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>나의 게시판</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main>
+        <h1>나의 게시판</h1>
+        <a href="{{ url_for('posts.new_post') }}">새 글 작성</a>
+
+        {% if posts %}
+            <ul>
+                {% for post in posts %}
+                    <li>{{ post.id }} · <a href="{{ url_for('posts.detail', post_id=post.id) }}">{{ post.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>등록된 게시글이 없습니다.</p>
+        {% endif %}
+    </main>
+</body>
+</html>

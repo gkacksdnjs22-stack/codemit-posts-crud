@@ -1,0 +1,177 @@
+:root{
+  --bg:#f7fafc;
+  --surface:#fff;
+  --text:#243447;
+  --muted:#6f8093;
+  --line:#dde6ee;
+  --primary:#294055;
+  --soft:#eef5fa;
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  color:var(--text);
+  background:var(--bg);
+  font-family:Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
+  line-height:1.7;
+}
+
+.step-shell{
+  width:min(980px,calc(100% - 32px));
+  margin:0 auto;
+  padding:42px 0 64px;
+}
+
+.step-topbar,
+.step-nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.step-topbar{margin-bottom:54px}
+
+.step-back,
+.step-nav a{
+  color:#60768a;
+  text-decoration:none;
+  font-size:.88rem;
+  font-weight:700;
+}
+
+.step-back:hover,
+.step-nav a:hover{color:var(--primary)}
+
+.step-index{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:0 12px;
+  border:1px solid #dce8f0;
+  border-radius:999px;
+  background:var(--soft);
+  color:#7790a6;
+  font-size:.75rem;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+
+.step-hero{
+  margin-bottom:28px;
+}
+
+.step-hero h1{
+  max-width:740px;
+  margin:14px 0 14px;
+  font-size:clamp(2.1rem,5vw,4.2rem);
+  line-height:1.08;
+  letter-spacing:-.055em;
+}
+
+.step-hero p{
+  max-width:720px;
+  margin:0;
+  color:var(--muted);
+  font-size:1.02rem;
+}
+
+.step-card{
+  overflow:hidden;
+  margin-top:30px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:var(--surface);
+  box-shadow:0 16px 38px rgba(67,91,112,.08);
+}
+
+.step-card img{
+  display:block;
+  width:100%;
+  height:auto;
+  background:#1e2933;
+}
+
+.reference-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+
+.reference-grid .step-card{
+  margin-top:0;
+}
+
+.reference-grid .step-caption{
+  padding:18px 20px 21px;
+}
+
+.step-caption{
+  padding:22px 26px 25px;
+}
+
+.step-caption strong{
+  display:block;
+  margin-bottom:5px;
+  font-size:1rem;
+}
+
+.step-caption span{color:var(--muted);font-size:.9rem}
+
+.reference-title{
+  margin:34px 0 6px;
+  font-size:1.25rem;
+  letter-spacing:-.02em;
+}
+
+.reference-intro{
+  margin:0;
+  color:var(--muted);
+  font-size:.93rem;
+}
+
+.step-copy{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.step-copy article{
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fff;
+}
+
+.step-copy h2{
+  margin:0 0 9px;
+  font-size:1.12rem;
+}
+
+.step-copy p{
+  margin:0;
+  color:var(--muted);
+  font-size:.93rem;
+}
+
+.step-nav{
+  margin-top:28px;
+  padding-top:22px;
+  border-top:1px solid var(--line);
+}
+
+.step-nav .next{color:var(--primary)}
+
+@media(max-width:700px){
+  .step-shell{padding-top:24px}
+  .step-topbar{margin-bottom:38px}
+  .step-copy{grid-template-columns:1fr}
+  .reference-grid{grid-template-columns:1fr}
+  .step-nav{align-items:flex-start;flex-direction:column}
+}

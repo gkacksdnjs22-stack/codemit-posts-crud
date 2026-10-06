@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    background: #f3f5fb;
+    color: #243047;
+    font-family: system-ui, sans-serif;
+    line-height: 1.6;
+}
+
+main {
+    max-width: 720px;
+    margin: 48px auto;
+    padding: 32px;
+    background: white;
+    border-radius: 16px;
+}
+
+a { color: #425bcc; }
+
+.post-body {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+label { display: block; margin-top: 16px; }
+input, textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #aeb8ce;
+    border-radius: 6px;
+    font: inherit;
+}
+button {
+    margin: 16px 0;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 6px;
+    background: #425bcc;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+.form-error { color: #b42318; }

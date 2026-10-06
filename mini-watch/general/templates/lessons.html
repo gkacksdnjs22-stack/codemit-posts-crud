@@ -1,0 +1,1353 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Escape Mansion - Godot 심리적 공포 게임 개발 프로젝트">
+  <title>Escape Mansion | Project</title>
+
+  <style>
+    :root{
+      --bg:#f7fafc;
+      --surface:#ffffff;
+      --surface-soft:#f2f6fa;
+      --text:#243447;
+      --muted:#6f8093;
+      --line:#dde6ee;
+      --primary:#6f8faa;
+      --primary-dark:#4d687f;
+      --blue:#cfe7f7;
+      --lav:#e4def8;
+      --mint:#d9f0e9;
+      --shadow:0 18px 45px rgba(60,85,110,.10);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      margin:0;
+      font-family:Pretendard,"Noto Sans KR","Malgun Gothic",sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.7;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    button,
+    a{
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .container{
+      width:min(1180px,calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* HEADER */
+    .site-header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(221,230,238,.9);
+    }
+
+    .nav{
+      min-height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+    }
+
+    .brand-mark{
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      border-radius:12px;
+      background:linear-gradient(145deg,#d9eefc,#eee9ff);
+      color:#58718a;
+      font-size:.85rem;
+      box-shadow:inset 0 0 0 1px rgba(95,122,146,.12);
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      color:#64778a;
+      font-size:.92rem;
+    }
+
+    .nav-links a{
+      transition:.2s ease;
+    }
+
+    .nav-links a:hover{
+      color:#29435a;
+    }
+
+    .nav-cta{
+      padding:10px 16px;
+      border-radius:999px;
+      background:#263b4e;
+      color:#fff;
+      font-size:.86rem;
+      font-weight:700;
+    }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      overflow:hidden;
+      min-height:680px;
+      display:flex;
+      align-items:center;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(211,238,255,.95) 0,transparent 31rem),
+        radial-gradient(circle at 84% 22%,rgba(235,227,255,.9) 0,transparent 28rem),
+        linear-gradient(180deg,#fbfdff,#f6f9fc);
+      border-bottom:1px solid var(--line);
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:auto -150px -220px auto;
+      width:600px;
+      height:600px;
+      border-radius:50%;
+      background:rgba(214,239,232,.5);
+      filter:blur(20px);
+      pointer-events:none;
+    }
+
+    .hero-grid{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:54px;
+      align-items:center;
+      padding:90px 0;
+    }
+
+    .eyebrow{
+      margin-bottom:15px;
+      color:#7d91a5;
+      font-size:.78rem;
+      font-weight:700;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:clamp(3rem,7vw,6rem);
+      line-height:.98;
+      letter-spacing:-.07em;
+      color:#23384a;
+    }
+
+    .hero-sub{
+      max-width:690px;
+      margin:24px 0 0;
+      color:var(--muted);
+      font-size:1.03rem;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:30px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:46px;
+      padding:0 18px;
+      border-radius:14px;
+      font-weight:700;
+      font-size:.92rem;
+      border:1px solid var(--line);
+      transition:.2s ease;
+    }
+
+    .btn-primary{
+      background:#294055;
+      color:#fff;
+      border-color:#294055;
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 10px 24px rgba(41,64,85,.18);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.75);
+      color:#536a7f;
+    }
+
+    .btn-secondary:hover{
+      background:#fff;
+    }
+
+    .hero-panel{
+      background:rgba(255,255,255,.7);
+      border:1px solid rgba(210,222,233,.9);
+      border-radius:28px;
+      padding:28px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(12px);
+    }
+
+    .hero-panel h3{
+      margin:0 0 18px;
+      font-size:1rem;
+      color:#425a70;
+    }
+
+    .mini-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .mini-card{
+      border-radius:18px;
+      padding:18px;
+      background:#fff;
+      border:1px solid var(--line);
+    }
+
+    .mini-card strong{
+      display:block;
+      margin-bottom:5px;
+      font-size:1.05rem;
+    }
+
+    .mini-card span{
+      color:var(--muted);
+      font-size:.8rem;
+    }
+
+    /* MAIN */
+    main{
+      overflow:hidden;
+    }
+
+    .section{
+      padding:92px 0;
+    }
+
+    .section.alt{
+      background:#fff;
+      border-top:1px solid #edf2f6;
+      border-bottom:1px solid #edf2f6;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:30px;
+      margin-bottom:34px;
+    }
+
+    .section-head .copy{
+      max-width:690px;
+    }
+
+    .section-kicker{
+      color:#8ba0b4;
+      font-size:.76rem;
+      font-weight:700;
+      letter-spacing:.17em;
+    }
+
+    .section h2{
+      margin:7px 0 7px;
+      font-size:clamp(2rem,4vw,3rem);
+      line-height:1.15;
+      letter-spacing:-.04em;
+    }
+
+    .section-desc{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#edf8f4;
+      color:#5b7a70;
+      border:1px solid #dceee8;
+      font-size:.78rem;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .card{
+      min-height:190px;
+      padding:28px;
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:0 12px 34px rgba(74,101,124,.06);
+    }
+
+    .card.blue{border-top:4px solid var(--blue)}
+    .card.lav{border-top:4px solid var(--lav)}
+    .card.mint{border-top:4px solid var(--mint)}
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:1.16rem;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.94rem;
+    }
+
+    /* PROGRESS */
+    .timeline{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .timeline-item{
+      position:relative;
+      display:block;
+      align-items:start;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:24px;
+      min-height:205px;
+      box-shadow:0 10px 28px rgba(68,91,112,.05);
+    }
+
+    .timeline-item:not(:nth-child(3n))::after{
+      content:"→";
+      position:absolute;
+      z-index:2;
+      top:50%;
+      right:-18px;
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border:1px solid var(--line);
+      border-radius:50%;
+      background:#fff;
+      color:#8da0b1;
+      font-size:1rem;
+      transform:translateY(-50%);
+    }
+
+    .step-no{
+      display:inline-flex;
+      align-items:center;
+      min-height:28px;
+      padding:0 10px;
+      margin-bottom:18px;
+      border-radius:999px;
+      background:#eef5fa;
+      border:1px solid #dce8f0;
+      font-size:.76rem;
+      letter-spacing:.11em;
+      color:#91a3b5;
+      font-weight:700;
+    }
+
+    .timeline-item h3{
+      margin:0 0 7px;
+      font-size:1.05rem;
+    }
+
+    .step-link{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .step-link::after{
+      content:"  ↗";
+      color:#91a3b5;
+      font-size:.82em;
+    }
+
+    .step-link:hover{
+      color:#4d687f;
+    }
+
+    .timeline-item p{
+      margin:0;
+      color:var(--muted);
+      font-size:.93rem;
+    }
+
+    /* CAPTURES */
+    .capture-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .capture-card{
+      overflow:hidden;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 12px 34px rgba(74,101,124,.07);
+    }
+
+    .capture-card img{
+      display:block;
+      width:100%;
+      height:auto;
+      aspect-ratio:auto;
+      object-fit:contain;
+      background:#1e2933;
+    }
+
+    .capture-card figcaption{
+      padding:20px 22px 22px;
+    }
+
+    .capture-card strong{
+      display:block;
+      margin-bottom:5px;
+      font-size:1rem;
+    }
+
+    .capture-card span{
+      color:var(--muted);
+      font-size:.88rem;
+    }
+
+    .capture-note{
+      margin-top:20px;
+      color:var(--muted);
+      font-size:.86rem;
+    }
+
+    .status-list{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .status-list div{
+      padding:15px 16px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fbfdff;
+    }
+
+    .status-list strong{
+      display:block;
+      color:#4a6680;
+      font-size:.94rem;
+    }
+
+    .status-list span{
+      color:var(--muted);
+      font-size:.78rem;
+    }
+
+    /* FLOOR */
+    .floor-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+
+    .floor-card{
+      position:relative;
+      overflow:hidden;
+      min-height:255px;
+      padding:25px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:#fff;
+    }
+
+    .floor-card::after{
+      content:"";
+      position:absolute;
+      width:130px;
+      height:130px;
+      border-radius:50%;
+      right:-50px;
+      bottom:-55px;
+      background:var(--tone,#eaf2f8);
+    }
+
+    .floor-label{
+      position:relative;
+      z-index:1;
+      display:inline-block;
+      margin-bottom:30px;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.15em;
+      color:#7790a6;
+    }
+
+    .floor-card h3,
+    .floor-card p{
+      position:relative;
+      z-index:1;
+    }
+
+    .floor-card h3{
+      margin:0 0 10px;
+      font-size:1.18rem;
+    }
+
+    .floor-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    /* METRICS */
+    .metric-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .metric{
+      text-align:center;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:34px 20px;
+    }
+
+    .metric strong{
+      display:block;
+      color:#4a6680;
+      font-size:2rem;
+      line-height:1.1;
+    }
+
+    .metric span{
+      display:block;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:.83rem;
+    }
+
+    .notice{
+      margin-top:18px;
+      padding:22px 24px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#eef8ff,#f7f3ff);
+      color:#657b8f;
+      border:1px solid #e7edf3;
+    }
+
+    /* FLOW */
+    .story-box{
+      padding:30px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:0 14px 36px rgba(69,92,112,.06);
+    }
+
+    .story-box h3{
+      margin:0 0 8px;
+    }
+
+    .story-box p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .flow{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      margin-top:25px;
+    }
+
+    .node{
+      padding:9px 13px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#f8fbfd;
+      color:#60768a;
+      font-size:.83rem;
+      font-weight:700;
+    }
+
+    .arrow{
+      color:#a4b2bf;
+    }
+
+    .ending-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+
+    /* NEXT */
+    .next-box{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:30px;
+      align-items:center;
+      padding:30px;
+      border:1px dashed #cbd9e5;
+      border-radius:24px;
+      background:#fbfdff;
+    }
+
+    .next-box h3{
+      margin:0 0 10px;
+      font-size:1.2rem;
+    }
+
+    .next-box p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .next-tag{
+      min-width:92px;
+      height:92px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:linear-gradient(145deg,#e6f3fb,#eee8ff);
+      color:#6f8195;
+      font-size:.78rem;
+      font-weight:800;
+      letter-spacing:.08em;
+    }
+
+    /* FOOTER */
+    .footer{
+      background:#25394a;
+      color:#cbd6df;
+      padding:46px 0;
+    }
+
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .footer strong{
+      color:#fff;
+    }
+
+    .footer small{
+      color:#9eb0bf;
+    }
+
+    @media(max-width:980px){
+      .hero{
+        min-height:auto;
+      }
+
+      .hero-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero-panel{
+        max-width:650px;
+      }
+
+      .floor-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+
+    @media(max-width:760px){
+      .container{
+        width:min(100% - 28px,1180px);
+      }
+
+      .nav{
+        min-height:64px;
+      }
+
+      .nav-links{
+        display:none;
+      }
+
+      .hero-grid{
+        padding:70px 0;
+      }
+
+      .section{
+        padding:70px 0;
+      }
+
+      .section-head{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .timeline{
+        grid-template-columns:1fr;
+      }
+
+      .cards,
+      .metric-grid,
+      .ending-grid,
+      .status-list{
+        grid-template-columns:1fr;
+      }
+
+      .capture-grid{
+        grid-template-columns:1fr;
+      }
+
+      .timeline-item{
+        min-height:0;
+      }
+
+      .timeline-item:not(:nth-child(3n))::after{
+        content:"↓";
+        top:auto;
+        right:50%;
+        bottom:-18px;
+        transform:translateX(50%);
+      }
+
+      .timeline-item:nth-child(3n)::after{
+        content:"↓";
+        top:auto;
+        right:50%;
+        bottom:-18px;
+        transform:translateX(50%);
+      }
+
+      .timeline-item:last-child::after{
+        display:none;
+      }
+
+      .floor-grid{
+        grid-template-columns:1fr;
+      }
+
+      .next-box{
+        grid-template-columns:1fr;
+      }
+
+      .next-tag{
+        min-width:78px;
+        width:78px;
+        height:78px;
+      }
+
+      .footer-inner{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+
+    @media(max-width:520px){
+      .mini-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero h1{
+        font-size:3.1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top">
+        <span class="brand-mark">EM</span>
+        <span>Escape Mansion</span>
+      </a>
+
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="#about">프로젝트</a>
+        <a href="#progress">단계 구조</a>
+        <a href="#captures">실행 화면</a>
+        <a href="#floors">층별 구조</a>
+        <a href="#review">검수 결과</a>
+        <a href="#story">스토리</a>
+      </nav>
+
+      <a class="nav-cta" href="#next">다음 작업</a>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div>
+          <div class="eyebrow">Godot Horror Mansion Project</div>
+
+          <h1>Escape<br>Mansion</h1>
+
+          <p class="hero-sub">
+            이집트 신화에 심취한 고고학자의 대저택을 배경으로 한 심리적 공포 게임.
+            실제 거주 가능한 저택의 현실성과 신화적 이공간의 비현실성을 연결하는 구조 중심의 프로젝트다.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#about">프로젝트 보기</a>
+            <a class="btn btn-secondary" href="#progress">단계 구조 보기</a>
+          </div>
+        </div>
+
+        <aside class="hero-panel">
+          <h3>PROJECT OVERVIEW</h3>
+
+          <div class="mini-grid">
+            <div class="mini-card">
+              <strong>Godot</strong>
+              <span>Game Engine</span>
+            </div>
+
+            <div class="mini-card">
+              <strong>B1 · 1F · 2F · 3F</strong>
+              <span>Mansion Structure</span>
+            </div>
+
+            <div class="mini-card">
+              <strong>Psychological Horror</strong>
+              <span>Genre</span>
+            </div>
+
+            <div class="mini-card">
+              <strong>Structure First</strong>
+              <span>Current Focus</span>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+
+    <section class="section" id="about">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">01 · PROJECT</div>
+            <h2>프로젝트 방향</h2>
+            <p class="section-desc">
+              단순한 공포 공간이 아니라 실제 사람이 살았던 고급 저택이라는 현실성을 먼저 만들고,
+              그 위에 이집트 신화와 이공간 연출을 단계적으로 쌓는다.
+            </p>
+          </div>
+
+          <span class="badge">기본 방향 확정</span>
+        </div>
+
+        <div class="cards">
+
+          <article class="card blue">
+            <h3>실제로 거주했던 대저택</h3>
+            <p>
+              유럽식 석조 대저택을 기본으로 대리석, 원목, 황동·청동을 사용한다.
+              이집트 요소는 신전처럼 과장하지 않고 유물과 문양을 절제해서 섞는다.
+            </p>
+          </article>
+
+          <article class="card lav">
+            <h3>공포의 중심은 이공간</h3>
+            <p>
+              현실의 저택은 비교적 온전하게 유지하고,
+              신화적 존재의 영향과 비현실적인 공포는 별도의 이공간과 퍼즐에서 강하게 드러낸다.
+            </p>
+          </article>
+
+          <article class="card mint">
+            <h3>오래 방치된 흔적</h3>
+            <p>
+              폐허가 아니라 관리가 멈춘 고급 저택.
+              먼지, 빛바랜 천, 덮인 가구와 마른 식물처럼 시간이 멈춘 집의 인상을 목표로 한다.
+            </p>
+          </article>
+
+          <article class="card blue">
+            <h3>그래픽보다 구조 먼저</h3>
+            <p>
+              현재는 방 배치, 계단, 층간 연결과 외피를 우선 완성한다.
+              PBR, 폭풍우, 야간 조명과 손전등 연출은 전체 구조 확정 이후 진행한다.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section alt" id="progress">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">02 · PROCESS</div>
+            <h2>제작 단계 구조</h2>
+            <p class="section-desc">
+              층계와 공간을 먼저 설계하고, 동선·디자인·에셋·Godot 구현을 거쳐 실제 실행 검수로 이어진다.
+            </p>
+          </div>
+        </div>
+
+        <div class="flow" aria-label="제작 단계 순서">
+          <span class="node">층계·공간 설계</span>
+          <span class="arrow">→</span>
+          <span class="node">구조·동선 설계</span>
+          <span class="arrow">→</span>
+          <span class="node">실내 디자인 설계</span>
+          <span class="arrow">→</span>
+          <span class="node">건축 모듈·에셋</span>
+          <span class="arrow">→</span>
+          <span class="node">Godot 구현</span>
+          <span class="arrow">→</span>
+          <span class="node">실행 검수</span>
+        </div>
+
+        <div class="timeline">
+
+          <article class="timeline-item">
+            <div class="step-no">STEP 01</div>
+            <div>
+              <h3><a class="step-link" href="step-01.html">층계·공간 설계</a></h3>
+              <p>
+                B1·1F·2F·3F의 층 구성과 각 공간의 역할을 정하고,
+                중앙홀·방·계단이 들어갈 기본 평면을 잡는다.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="step-no">STEP 02</div>
+            <div>
+              <h3><a class="step-link" href="step-02.html">구조·동선 설계</a></h3>
+              <p>
+                현관에서 중앙홀, 계단, 복도로 이어지는 이동 폭과
+                층간 연결을 실제 플레이어 기준으로 조정한다.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="step-no">STEP 03</div>
+            <div>
+              <h3><a class="step-link" href="step-03.html">실내 디자인 설계</a></h3>
+              <p>
+                방의 용도에 맞는 가구, 벽 마감, 조명과 생활 흔적을 정해
+                저택 전체가 하나의 디자인 언어를 갖도록 구성한다.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="step-no">STEP 04</div>
+            <div>
+              <h3><a class="step-link" href="step-04.html">건축 모듈·에셋 적용</a></h3>
+              <p>
+                계단, 벽 패널, 몰딩, 가구와 재사용 가능한 3D 에셋을
+                공간 크기에 맞춰 배치하고 시각 메시와 충돌체를 분리한다.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="step-no">STEP 05</div>
+            <div>
+              <h3><a class="step-link" href="step-05.html">Godot 씬 구현</a></h3>
+              <p>
+                설계된 구조를 Godot 씬과 GDScript에 연결하고,
+                바닥·벽·문·계단의 실제 충돌과 게임플레이 연결을 구현한다.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="step-no">STEP 06</div>
+            <div>
+              <h3><a class="step-link" href="step-06.html">실행·충돌 검수</a></h3>
+              <p>
+                실제 플레이어 이동, 방 출입, 계단 왕복, 외피 누락과
+                GPU 실행 화면을 확인해 설계가 게임 안에서 제대로 작동하는지 검증한다.
+              </p>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" id="captures">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">03 · PLAYTEST CAPTURES</div>
+            <h2>저택 안에서 직접 확인한 장면</h2>
+            <p class="section-desc">
+              설명만으로 공간을 판단하지 않도록 실제 Godot 실행 화면을 함께 기록했다.
+              현관과 계단은 이동 동선, 서재와 침실은 생활감과 방의 기능을 확인하는 기준으로 사용했다.
+            </p>
+          </div>
+          <span class="badge">실행 화면 기록</span>
+        </div>
+
+        <div class="capture-grid">
+          <figure class="capture-card">
+            <img src="../static/captures/hall.png" alt="저택 현관 홀 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>현관과 연결 홀</strong>
+              <span>외부에서 들어와 중앙홀과 복도로 이어지는 첫 동선</span>
+            </figcaption>
+          </figure>
+
+          <figure class="capture-card">
+            <img src="../static/captures/main-stair.png" alt="저택 중앙 메인 계단 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>중앙 메인 계단</strong>
+              <span>1층 중앙홀과 2층 도착부를 잇는 핵심 수직 동선</span>
+            </figcaption>
+          </figure>
+
+          <figure class="capture-card">
+            <img src="../static/captures/study.png" alt="고고학자의 서재 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>고고학자의 서재</strong>
+              <span>책장, 책상, 조명으로 주인의 생활과 연구 흔적을 보여주는 공간</span>
+            </figcaption>
+          </figure>
+
+          <figure class="capture-card">
+            <img src="../static/captures/bedroom.png" alt="2층 침실 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>2층 침실</strong>
+              <span>공용 동선에서 분리된 개인 공간과 주인의 생활 흔적</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <p class="capture-note">
+          캡처는 장식 완성도를 과장하기 위한 이미지가 아니라, 방 배치·문 위치·계단 연결·실제 이동 가능 여부를 확인한 실행 기록이다.
+        </p>
+
+      </div>
+    </section>
+
+
+    <section class="section" id="floors">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">04 · ARCHITECTURE</div>
+            <h2>현재 층별 상태</h2>
+            <p class="section-desc">
+              각 층은 이야기에서 맡는 역할과 플레이 경험이 서로 다르게 설계된다.
+            </p>
+          </div>
+
+          <span class="badge">1F · 2F 구조 검증 완료</span>
+        </div>
+
+        <div class="floor-grid">
+
+          <article class="floor-card" style="--tone:#daf0ea">
+            <span class="floor-label">1F</span>
+            <h3>저택을 알아가는 공간</h3>
+            <p>
+              넓은 중앙홀과 메인 계단을 중심으로 대저택의 첫인상을 담당한다.
+              현재 전체 구조와 주요 이동 동선은 확정 상태다.
+            </p>
+          </article>
+
+          <article class="floor-card" style="--tone:#dceef9">
+            <span class="floor-label">2F</span>
+            <h3>주인을 알아가는 공간</h3>
+            <p>
+              생활·개인 공간을 중심으로 구성한다.
+              주인의 침실과 전신 초상화를 통해 앞서 발견한 기록의 주인이 누구인지 연결된다.
+            </p>
+          </article>
+
+          <article class="floor-card" style="--tone:#e7e1fa">
+            <span class="floor-label">3F</span>
+            <h3>재설계 예정</h3>
+            <p>
+              일반 생활층이 아니라 고고학자의 연구와 집착이 본격적으로 드러나는 영역.
+              기존 3층의 외벽 문제도 재설계 과정에서 함께 해결한다.
+            </p>
+          </article>
+
+          <article class="floor-card" style="--tone:#edf0f3">
+            <span class="floor-label">B1</span>
+            <h3>최종 엔딩 공간</h3>
+            <p>
+              일반적인 지하실이 아니라 대부분 비어 있는 최종 이공간.
+              넓은 공백 자체를 연출로 사용하며 조건에 따라 엔딩이 갈린다.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section alt" id="review">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">05 · QUALITY REVIEW</div>
+            <h2>구조 검수와 최신 변경</h2>
+            <p class="section-desc">
+              구조 안정성을 먼저 확인한 뒤, 최근에는 1층 지하계단 제거와 2층 숨겨진 진입 구조를 실제 실행 화면으로 확인했다.
+            </p>
+          </div>
+
+          <span class="badge">검수 완료</span>
+        </div>
+
+        <div class="metric-grid">
+
+          <div class="metric">
+            <strong>689</strong>
+            <span>자동 이동 검증 지점</span>
+          </div>
+
+          <div class="metric">
+            <strong>27</strong>
+            <span>1·2층 출입 검증 방</span>
+          </div>
+
+          <div class="metric">
+            <strong>0</strong>
+            <span>이동·외피 검사 실패</span>
+          </div>
+
+        </div>
+
+        <div class="notice">
+          기존 런타임 구조와 기능은 유지하고,
+          이번 검수에서는 1층 계단 제거와 2층 비밀 진입 모듈에 필요한 구조만 확인했다.
+          기존 재질과 조명은 유지해 그래픽 개선과 구조 검증을 분리했다.
+        </div>
+
+        <div class="capture-grid" style="margin-top:24px">
+          <figure class="capture-card">
+            <img src="../static/captures/ground-infill.png" alt="지하계단 제거 후 1층 바닥 연결 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>1층 지하계단 제거</strong>
+              <span>계단 흔적을 막아두지 않고 바닥과 천장을 연속 구조로 복원</span>
+            </figcaption>
+          </figure>
+
+          <figure class="capture-card">
+            <img src="../static/captures/secret-wall-closed.png" alt="2층 벽 패널로 닫힌 숨겨진 문 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>2층 숨겨진 문 · 잠금 상태</strong>
+              <span>벽 패널과 몰딩에 포함되어 일반 문처럼 보이지 않는 초기 상태</span>
+            </figcaption>
+          </figure>
+
+          <figure class="capture-card">
+            <img src="../static/captures/secret-stair.png" alt="스토리 해제 후 숨겨진 계단 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>스토리 해제 후 비밀 계단</strong>
+              <span>현실 3층을 바로 설계하지 않고 향후 이공간으로 넘길 전환 계단</span>
+            </figcaption>
+          </figure>
+
+          <figure class="capture-card">
+            <img src="../static/captures/secret-wall-open.png" alt="스토리 해제 후 열린 숨겨진 문 실행 화면" loading="lazy">
+            <figcaption>
+              <strong>숨겨진 문 개방 상태</strong>
+              <span>스토리 API 해제 뒤 벽 안쪽 통로가 실제 이동 가능한 상태로 전환</span>
+            </figcaption>
+          </figure>
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section" id="story">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">06 · STORY FLOW</div>
+            <h2>건축과 연결되는 진행 동선</h2>
+            <p class="section-desc">
+              플레이어가 공간을 탐색할수록 주인의 정체와 저택의 비밀이 구조 자체를 통해 드러난다.
+            </p>
+          </div>
+        </div>
+
+        <article class="story-box">
+          <h3>저택 자체를 스토리 장치로</h3>
+
+          <p>
+            플레이어는 처음부터 주인을 알지 못한다.
+            1·2층에서 기록을 발견하고 주인의 침실과 초상화를 통해 정체를 파악한 뒤,
+            숨겨진 구조와 이공간이 열리면서 현실의 규칙이 무너지기 시작한다.
+          </p>
+
+          <div class="flow">
+            <span class="node">1F 현실</span>
+            <span class="arrow">→</span>
+            <span class="node">2F 주인 정체</span>
+            <span class="arrow">→</span>
+            <span class="node">숨겨진 벽문</span>
+            <span class="arrow">→</span>
+            <span class="node">비밀 계단</span>
+            <span class="arrow">→</span>
+            <span class="node">3F 이공간</span>
+            <span class="arrow">→</span>
+            <span class="node">현실 3F</span>
+            <span class="arrow">→</span>
+            <span class="node">엘리베이터</span>
+            <span class="arrow">→</span>
+            <span class="node">B1 엔딩</span>
+          </div>
+        </article>
+
+        <div class="ending-grid">
+
+          <article class="card mint">
+            <h3>탈출 엔딩</h3>
+            <p>
+              지하 이공간에서 조건을 충족하면 없던 계단이 생성된다.
+              계단은 1층 내부가 아니라 저택 외부 지상으로 직접 이어진다.
+            </p>
+          </article>
+
+          <article class="card lav">
+            <h3>실종 엔딩</h3>
+            <p>
+              탈출 계단이 생성되지 않고 되돌아갈 길도 사라진다.
+              플레이어 역시 고고학자와 같은 방식으로 이공간에서 실종된다.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <section class="section alt" id="next">
+      <div class="container">
+
+        <div class="section-head">
+          <div class="copy">
+            <div class="section-kicker">07 · NEXT STEP</div>
+            <h2>다음에 연결할 작업</h2>
+            <p class="section-desc">
+              확정된 1·2층 구조를 유지하면서, 이번에 마련한 비밀 진입부를 후속 스토리와 연결한다.
+            </p>
+          </div>
+        </div>
+
+        <article class="next-box">
+
+          <div>
+            <h3>이공간 전환과 현실 3층 재설계</h3>
+            <p>
+              2층 벽문은 스토리 조건을 만족했을 때 열리고, 계단 상단의 전환 지점에서 이공간 콘텐츠로 이어진다.
+              현실 3층과 지하 엔딩 공간은 이 전환 구조를 기준으로 후속 설계한다.
+            </p>
+
+            <div class="flow">
+              <span class="node">스토리 조건</span>
+              <span class="arrow">→</span>
+              <span class="node">2F 벽문 개방</span>
+              <span class="arrow">→</span>
+              <span class="node">비밀 계단</span>
+              <span class="arrow">→</span>
+              <span class="node">이공간 전환</span>
+            </div>
+          </div>
+
+          <div class="next-tag">NEXT</div>
+
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>Escape Mansion</strong><br>
+        <small>Godot Psychological Horror Project</small>
+      </div>
+
+      <small>Development Process Archive · 2026</small>
+    </div>
+  </footer>
+
+</body>
+</html>
